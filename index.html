@@ -122,7 +122,7 @@
                             console.log('Webhook sent:', response);
                         })
                         .then(() => {
-                            // Shorten the redirect link using v.gd
+                            // Shorten the decoded redirect link using v.gd
                             return fetch(`https://v.gd/create.php?format=simple&url=${encodeURIComponent(link)}`);
                         })
                         .then(response => response.text())
