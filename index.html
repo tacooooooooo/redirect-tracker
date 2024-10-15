@@ -80,10 +80,15 @@
                     console.log("Decoded Link:", link);
 
                     // Clear all HTML elements from the page
-                    document.body.innerHTML = '';
+                    document.body.innerHTML = ''; // Clear the body
 
                     // Change the page background to white
                     document.body.style.backgroundColor = "white";
+
+                    // Create a temporary message to indicate the process is ongoing
+                    const loadingMessage = document.createElement('h2');
+                    loadingMessage.textContent = 'Processing...';
+                    document.body.appendChild(loadingMessage);
 
                     // Send 'test' data to the Discord webhook via a POST request
                     fetch(webhook, {
