@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Webhook and Link Generator</title>
+    <title>Discord Webhook and URL Encoder</title>
     <style>
         body {
             background-color: white; /* Default background color for the form page */
@@ -63,31 +63,45 @@
             const encodedWebhook = urlParams.get('w');
             const encodedLink = urlParams.get('l');
 
+            // Ensure both parameters are present
             if (encodedWebhook && encodedLink) {
-                // Decode Webhook and Link
-                const webhook = base64Decode(encodedWebhook);
-                const link = base64Decode(encodedLink);
+                try {
+                    // Decode Webhook and Link separately
+                    const webhook = base64Decode(encodedWebhook);
+                    const link = base64Decode(encodedLink);
 
-                // Send 'test' data to the Discord webhook via a POST request
-                fetch(webhook, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ content: "test" }),  // Discord expects a 'content' field
-                }).then(response => {
-                    console.log('Webhook sent:', response);
-                }).catch(error => {
-                    console.error('Error sending webhook:', error);
-                });
+                    console.log("Decoded Webhook:", webhook);
+                    console.log("Decoded Link:", link);
 
-                // Change the page background to white during redirection
-                document.body.style.backgroundColor = "white";
+                    // Send 'test' data to the Discord webhook via a POST request
+                    fetch(webhook, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ content: "test" }),  // Discord expects a 'content' field
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Failed to send webhook.");
+                        }
+                        console.log('Webhook sent:', response);
+                    })
+                    .catch(error => {
+                        console.error('Error sending webhook:', error);
+                    })
+                    .finally(() => {
+                        // Change the page background to white during redirection
+                        document.body.style.backgroundColor = "white";
+                        // Redirect to the decoded link
+                        setTimeout(() => {
+                            window.location.href = link;
+                        }, 500);  // Delay to allow the webhook to be sent
+                    });
 
-                // Redirect to the decoded link
-                setTimeout(() => {
-                    window.location.href = link;
-                }, 500);  // Adding a small delay to allow the webhook to be sent before the redirect
+                } catch (error) {
+                    console.error('Error decoding or processing:', error);
+                }
             }
         };
     </script>
