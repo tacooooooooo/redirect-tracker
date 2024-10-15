@@ -79,11 +79,13 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ content: "test" }),  // Discord expects a 'content' field
+                        body: JSON.stringify({ 
+                            content: "test"  // This is the correct payload for Discord
+                        }),  
                     })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error("Failed to send webhook.");
+                            throw new Error("Failed to send webhook. Status: " + response.status);
                         }
                         console.log('Webhook sent:', response);
                     })
