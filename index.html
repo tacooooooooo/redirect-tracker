@@ -13,11 +13,12 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            font-family: Arial;
         }
     </style>
 </head>
 <body>
-    <h1>Discord Webhook and URL Encoder</h1>
+    <h1>Serverless Redirect Tracking</h1>
 
     <!-- Input form for Webhook URL and Redirect URL -->
     <form id="form">
@@ -60,7 +61,7 @@
             const generatedUrl = `?w=${encodedWebhook}&l=${encodedLink}`;
 
             // Display the generated link (relative to current site)
-            document.getElementById("generatedLink").innerHTML = `<a href="${generatedUrl}" target="_blank">${generatedUrl}</a>`;
+            document.getElementById("generatedLink").innerHTML = `<a href="${generatedUrl}" target="_blank">Link</a>`;
         });
 
         // Check if the page is loaded with parameters
