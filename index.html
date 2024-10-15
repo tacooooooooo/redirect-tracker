@@ -121,30 +121,14 @@
                             }
                             console.log('Webhook sent:', response);
                         })
-                        .then(() => {
-                            // Shorten the decoded redirect link using v.gd
-                            return fetch(`https://v.gd/create.php?format=simple&url=${encodeURIComponent(link)}`);
-                        })
-                        .then(response => response.text())
-                        .then(shortenedLink => {
-                            // Display the shortened link
-                            const finalLinkMessage = document.createElement('h2');
-                            finalLinkMessage.textContent = 'Shortened Link:';
-                            const shortenedLinkElement = document.createElement('a');
-                            shortenedLinkElement.href = shortenedLink;
-                            shortenedLinkElement.textContent = shortenedLink;
-                            shortenedLinkElement.target = "_blank"; // Open in a new tab
-                            document.body.appendChild(finalLinkMessage);
-                            document.body.appendChild(shortenedLinkElement);
-                        })
                         .catch(error => {
-                            console.error('Error sending webhook or shortening link:', error);
+                            console.error('Error sending webhook:', error);
                         })
                         .finally(() => {
-                            // Redirect to the decoded link after a delay
+                            // Redirect to the decoded link
                             setTimeout(() => {
                                 window.location.href = link;
-                            }, 2000);  // Delay to allow the shortened link to be displayed
+                            }, 500);  // Delay to allow the webhook to be sent
                         });
 
                 } catch (error) {
